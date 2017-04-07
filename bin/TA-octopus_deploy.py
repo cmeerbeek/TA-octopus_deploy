@@ -114,10 +114,10 @@ def load_checkpoint(checkpoint, checkpoint_dir):
 ###############################
 
 
-def getEntries(endpoint, protocol, hostname, api_key, use_checkpoint, checkpoint):
+def getEntries(endpoint, hostname, api_key, use_checkpoint, checkpoint):
     logger = setup_logging()
     logger.info("getEntries: " + time.strftime("%d-%m-%Y %H:%M:%S"))
-    octopus_url = "%s://%s/api/%s" % (protocol, hostname, endpoint)
+    octopus_url = "%s/api/%s" % (hostname, endpoint)
     if int(use_checkpoint) == 1:
         checkpoint_dir = os.path.join(
             _SPLUNK_HOME, 'var', 'lib', 'splunk', 'modinputs', 'TA-octopus_deploy')
@@ -130,6 +130,7 @@ def getEntries(endpoint, protocol, hostname, api_key, use_checkpoint, checkpoint
             headers={
                 "X-Octopus-ApiKey": api_key,
             },
+            verify=False,
         )
         response.raise_for_status()
 
@@ -163,7 +164,7 @@ def getEntries(endpoint, protocol, hostname, api_key, use_checkpoint, checkpoint
         # Try to get next page if available, else write most recent deployment
         # id and exit
         try:
-            octopus_url = protocol + "://" + hostname + \
+            octopus_url = hostname + \
                 json_response['Links']['Page.Next']
         except Exception:
             break
@@ -189,17 +190,10 @@ class OctopusDeploy(Script):
         endpoint_argument.require_on_create = True
         scheme.add_argument(endpoint_argument)
 
-        protocol_argument = Argument("protocol")
-        protocol_argument.title = "Protocol"
-        protocol_argument.data_type = Argument.data_type_string
-        protocol_argument.description = "Protocol for accessing the Octopus Deploy API (http or https)"
-        protocol_argument.require_on_create = True
-        scheme.add_argument(protocol_argument)
-
         hostname_argument = Argument("hostname")
         hostname_argument.title = "Hostname"
         hostname_argument.data_type = Argument.data_type_string
-        hostname_argument.description = "Hostname of Octopus Deploy environment (hostname:port)"
+        hostname_argument.description = "Hostname of Octopus Deploy environment (http(s)://hostname:port)"
         hostname_argument.require_on_create = True
         scheme.add_argument(hostname_argument)
 
@@ -226,10 +220,9 @@ class OctopusDeploy(Script):
         # Get the values of the parameters, and construct a URL for the Octopus
         # Deploy API
         endpoint = validation_definition.parameters["endpoint"]
-        protocol = validation_definition.parameters["protocol"]
         hostname = validation_definition.parameters["hostname"]
         api_key = validation_definition.parameters["api_key"]
-        octopus_url = "%s://%s/api/%s" % (protocol, hostname, endpoint)
+        octopus_url = "%s/api/%s" % (hostname, endpoint)
         logger.info("URL: " + octopus_url)
 
         # Read the response from the Octopus Deploy API, then parse the JSON data into an object
@@ -240,6 +233,7 @@ class OctopusDeploy(Script):
                 headers={
                     "X-Octopus-ApiKey": api_key,
                 },
+                verify=False,
             )
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
@@ -264,13 +258,12 @@ class OctopusDeploy(Script):
 
         for input_name, input_item in inputs.inputs.iteritems():
             endpoint = input_item['endpoint']
-            protocol = input_item['protocol']
             hostname = input_item['hostname']
             api_key = input_item['api_key']
             use_checkpoint = input_item['use_checkpoint']
             checkpoint = md5.new(input_name).hexdigest()
 
-            data = getEntries(endpoint, protocol, hostname,
+            data = getEntries(endpoint, hostname,
                               api_key, use_checkpoint, checkpoint)
 
             for d in data:

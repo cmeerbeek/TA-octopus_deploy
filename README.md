@@ -6,6 +6,16 @@ The Splunk TA for Octopus Deploy is a technology add-on for retrieving data from
 
 You must have an installed and configured Octopus application to complete the setup process of this app.
 
+### Used libraries
+
+Splunklib which originates from the Splunk Software Development Kit for Python. The Splunk Software Development Kit for Python is licensed under the [Apache
+License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+
+For compatibility with Python 2.#, The Splunk Software Development Kit
+for Python ships with ordereddict.py from the ordereddict package on
+[PyPI](http://pypi.python.org/pypi/ordereddict/1.1), which is licensed
+under the MIT license (see the top of bin/splunklib/ordereddict.py).
+
 ### Install Prerequisites
 
 Too make sure everything works correctly make sure the following is available and working:
@@ -32,14 +42,15 @@ The TA will not deliver predefined inputs for now so you need to configure each 
 
 When you press "New" the Input Wizard will start and you will see one screen with multiple fields.
 
-1. name > The name for Input in the Splunk UI (e.g. Octopus Users)
+1. Name > The name for Input in the Splunk UI (e.g. Octopus Users)
 2. Endpoint > The Octopus endpoint to access (e.g. users)
-3. Protocol > The protocol on which Octopus Deploy is listening (HTTP or HTTPS)
-4. Hostname > The hostname and port on which Octopus Deploy is listening (e.g. octopus.example.com:8080)
-5. API key > The API key needed for authentication with the API. See [Octopus Wiki](https://github.com/OctopusDeploy/OctopusDeploy-Api/wiki).
-6. Use check pointing > If you do not want to index all the data inside each time the Input is running enable check pointing. The Input will keep track of the last indexed record and will only index new records.
+2. Hostname > The protocol, hostname and port on which Octopus Deploy is listening (e.g. http://octopus.example.com:8080)
+5. Password > The API key needed for authentication with the API. See [Octopus Wiki](https://github.com/OctopusDeploy/OctopusDeploy-Api/wiki). 
+6. Confirm password > The API key needed for authentication with the API.
+7. Use check pointing > If you do not want to index all the data inside each time the Input is running enable check pointing. The Input will keep track of the last indexed record and will only index new records.
+8. Interval > Configure the interval on which the Input needs to run. 
 
-Check "More Settings" to configure Interval, Sourcetype, Host and Index. By default the TA will use the `octopus` Index and an Interval of 300 seconds if you add an Input.
+Check "More Settings" to configure Sourcetype, Host and Index.
 
 The following list show the most common endpoints for Octopus Deploy API and if check pointing should be applied:
 * machines (use check pointing: NO)
@@ -71,7 +82,7 @@ This app is developed in the open at [GitHub](https://github.com/cmeerbeek/TA-oc
 
 ## ToDo
 
-* Add configuration page so you only need to provide the authentication information and data starts flowing.
+* Rebuild Add-on using Splunk Add-on Builder so the TA will confirm to Splunk best practices and uses a nice UI for configuring inputs
 
 ## Copyright
 
