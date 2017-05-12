@@ -9,3 +9,8 @@ First version
 - Changed hostname parameter to include protocol
 - Changed API key to be a password-entry
 - Added license info for Splunklib
+
+## 1.2
+
+- Removed protocol from inputs.conf.spec
+

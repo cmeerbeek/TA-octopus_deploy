@@ -3,8 +3,6 @@
 
 endpoint = <value>
 * This is the Octopus Deploy endpoint like deployments, users or events.
-protocol = <value>
-* Protocol for accessing the Octopus Deploy API
 hostname = <value>
 * Hostname of Octopus Deploy environment (hostname:port)
 api_key = <value>
