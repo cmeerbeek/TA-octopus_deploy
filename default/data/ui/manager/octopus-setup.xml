@@ -33,6 +33,12 @@
           <key name="exampleText">URI of Octopus Deploy environment (http(s)://hostname:port)</key>
         </element>
 
+        <element name="verify_ssl" type="checkbox" label="Verify SSL">
+            <view name="edit"/>
+            <view name="create"/>
+            <key name="exampleText">Decide if you want to verify SSL certificates for HTTPS requests</key>
+        </element>
+
         <element name="api_key" type="password" label="Password">
             <view name="edit"/>
             <view name="create"/>

@@ -11,6 +11,8 @@ You must have an installed and configured Octopus application to complete the se
 Splunklib which originates from the Splunk Software Development Kit for Python. The Splunk Software Development Kit for Python is licensed under the [Apache
 License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
 
+This add-on ships with the Python SDK v1.6.2.
+
 For compatibility with Python 2.#, The Splunk Software Development Kit
 for Python ships with ordereddict.py from the ordereddict package on
 [PyPI](http://pypi.python.org/pypi/ordereddict/1.1), which is licensed
